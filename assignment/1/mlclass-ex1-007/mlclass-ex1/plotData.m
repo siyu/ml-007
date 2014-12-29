@@ -18,7 +18,7 @@ plot(x, y, 'rx', 'MarkerSize', 10);		% plot the data
 ylabel('Profit in $10,000s');			% set the y-axis label
 xlabel('Population of city in 10,000s');% set the x-axis label
 
-figure; % open a new figure window
+%figure; % open a new figure window
 
 
 

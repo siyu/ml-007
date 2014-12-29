@@ -18,14 +18,10 @@ for iter = 1:num_iters
     %
 
 
-
-
-
-
-
-
-
-
+	h = X * theta;
+	error = h - y;
+	for t = 1: size(X, 2)
+		theta(t) = theta(t) .- alpha .* 1 ./ m .* sum(error .* X(:,t))
 
     % ============================================================
 

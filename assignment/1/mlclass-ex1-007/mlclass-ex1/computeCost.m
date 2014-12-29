@@ -15,9 +15,9 @@ m = length(y); % number of training examples
 
 h = X * theta;
 error = h - y;
-error_sq = error .^ 2
+error_sq = error .^ 2;
 
-J = sum(error_sq)/ (2 .* m);
+J = sum(error_sq) / (2 .* m);
 
 
 % =========================================================================
