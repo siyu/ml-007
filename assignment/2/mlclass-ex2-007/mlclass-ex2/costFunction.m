@@ -20,8 +20,15 @@ grad = zeros(size(theta));
 % Note: grad should have the same dimensions as theta
 %
 
+h_input = X * theta;
+h = sigmoid(h_input);
+error = -y .* log(h) .- (1 .- y) .* log(1 .- h);
+J = sum(error) ./ m;
 
 
+
+for i = 1: size(grad)
+	grad(i) = sum( (h - y) .* X(:,i)) ./ m;
 
 
 
