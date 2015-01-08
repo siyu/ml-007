@@ -37,12 +37,20 @@ grad = zeros(size(theta));
 %
 
 
+h_input = X * theta;
+h = sigmoid(h_input);
+error = -y .* log(h) .- (1 .- y) .* log(1 .- h);
+reg = lambda ./ ( 2 .* m) .* sum(theta(2:size(theta)) .^ 2);
+J = sum(error) ./ m .+ reg;
 
 
 
-
-
-
+% n x m  * m x 1 = n * 1
+theta_for_reg = theta;
+theta_for_reg(1) = 0;
+%disp(X')
+%disp(h-y)
+grad = X' * (h-y) ./ m .+ lambda ./ m .* theta_for_reg;
 
 
 % =============================================================

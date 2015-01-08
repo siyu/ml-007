@@ -22,9 +22,19 @@ p = zeros(size(X, 1), 1);
 %
 
 
+% Add ones to the X data matrix so it becomes 5000x401
+X = [ones(m, 1) X];
 
+% Theta1 is 25x401, Theta2 is 10x26
+hidden2output = sigmoid(X * Theta1');
+hidden2output = [ones(size(hidden2output,1), 1) hidden2output];
 
+output_layer_result = sigmoid(hidden2output * Theta2');
 
+% output_layer_result is 5000x10, then use max to find index
+[x ix] = max(output_layer_result, [], 2);
+
+p = ix;
 
 
 
