@@ -16,12 +16,17 @@ function [J grad] = nnCostFunction(nn_params, ...
 
 % Reshape nn_params back into the parameters Theta1 and Theta2, the weight matrices
 % for our 2 layer neural network
+
+
+
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
+		
+
 
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
-
+				 
 % Setup some useful variables
 m = size(X, 1);
          
@@ -65,19 +70,37 @@ Theta2_grad = zeros(size(Theta2));
 
 
 
+% add 1s to the first column (bias input)
+X = [ones(m,1) X];
+
+% X is 5000x401, Theta1 is 25 x 401
+z2 = X * Theta1';
+a2 = sigmoid(z2);	% a2 is now 5000 x 25
+a2 = [ones(size(a2,1),1) a2];	
+
+% a2 is 5000x26, Theta is 10x26
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);	% a3 is now 5000x10
 
 
+a3_num_rows = size(a3,1);
+a3_num_cols = size(a3,2);
 
+error = zeros(a3_num_rows,1);
 
+y_prime = zeros(size(y,1),a3_num_cols);
+for i=1:size(y,1)
+	y_prime(i,y(i))=1;
+end
 
+for i=1:a3_num_rows
+	for j=1:a3_num_cols
+		error(i) = error(i) .+ (-y_prime(i,j) .* log(a3(i,j)) .- (1 .- y_prime(i,j)) .* log(1 .- a3(i,j)));
+	end
+end
 
-
-
-
-
-
-
-
+%reg = lambda ./ ( 2 .* m) .* sum(theta(2:size(theta)) .^ 2);
+J = sum(error) ./ m ;
 
 
 % -------------------------------------------------------------
