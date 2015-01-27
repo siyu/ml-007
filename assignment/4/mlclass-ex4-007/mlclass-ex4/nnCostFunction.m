@@ -17,12 +17,8 @@ function [J grad] = nnCostFunction(nn_params, ...
 % Reshape nn_params back into the parameters Theta1 and Theta2, the weight matrices
 % for our 2 layer neural network
 
-
-
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
-		
-
 
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
@@ -68,8 +64,6 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
-
-
 % add 1s to the first column (bias input)
 X = [ones(m,1) X];
 
@@ -81,7 +75,6 @@ a2 = [ones(size(a2,1),1) a2];
 % a2 is 5000x26, Theta is 10x26
 z3 = a2 * Theta2';
 a3 = sigmoid(z3);	% a3 is now 5000x10
-
 
 a3_num_rows = size(a3,1);
 a3_num_cols = size(a3,2);
@@ -99,11 +92,37 @@ for i=1:a3_num_rows
 	end
 end
 
-%reg = lambda ./ ( 2 .* m) .* sum(theta(2:size(theta)) .^ 2);
+% no regularization
 J = sum(error) ./ m ;
 
+% regularization
+Theta1_no_bias = Theta1(:,2:end);
+Theta1_no_bias_sq = Theta1_no_bias .^ 2;
+Theta2_no_bias = Theta2(:,2:end);
+Theta2_no_bias_sq = Theta2_no_bias .^ 2;
+reg = (sum(Theta1_no_bias_sq(:)) + sum(Theta2_no_bias_sq(:))) .* lambda ./ (2 .* m);
 
+J = J .+ reg;
+
+% Back propagation
 % -------------------------------------------------------------
+% part 1: see feed forward section above 
+% part 2: calculate output layer error
+d3 = a3 - y_prime;	% e3 is 5000 x 10
+
+% part 3: calculate hidden layer error
+d2 = d3 * Theta2(:,2:end) .* sigmoidGradient(z2);	% e2 is 5000x25
+
+% part 4: accumulate gradient
+delta1 = d2' * X;	% 25 x 401
+delta2 = d3' * a2;	% 10 x 26
+
+Theta1_grad = delta1 ./ m;	% 25 x 401
+Theta2_grad = delta2 ./ m;	% 10 x 26
+
+% add regularization
+Theta1_grad =  [Theta1_grad(:,1) (Theta1_grad(:,2:end) + lambda ./ m .* Theta1(:,2:end))];
+Theta2_grad =  [Theta2_grad(:,1) (Theta2_grad(:,2:end) + lambda ./ m .* Theta2(:,2:end))];
 
 % =========================================================================
 
