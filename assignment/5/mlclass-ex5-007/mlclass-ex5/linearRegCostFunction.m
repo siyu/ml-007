@@ -21,12 +21,15 @@ grad = zeros(size(theta));
 
 
 
+% cost function 
+sum_error = sum((X * theta .- y) .^ 2) ./ (2 .* m);
+regularization = sum(theta(2:end) .^ 2) .* lambda ./ (2 .* m);
+J = sum_error + regularization;
 
-
-
-
-
-
+% gradient
+grad(1) = sum((X * theta .- y) .* X(1)) ./ m;
+for i = 2: size(grad)
+	grad(i) = sum((X * theta .- y) .* X(:,i)) ./ m .+ lambda ./ m .* theta(i);
 
 
 
