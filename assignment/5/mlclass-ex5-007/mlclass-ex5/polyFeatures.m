@@ -16,7 +16,11 @@ X_poly = zeros(numel(X), p);
 % 
 
 
+for i=1:numel(X)
 
+	X_poly(i,:) = X(i) .^ [1:p];
+
+end
 
 
 

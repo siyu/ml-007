@@ -84,7 +84,7 @@ pause;
 %
 
 %  Train linear regression with lambda = 0
-lambda = 0;
+lambda = 1;
 [theta] = trainLinearReg([ones(m, 1) X], y, lambda);
 
 %  Plot fit over the data
@@ -106,7 +106,7 @@ pause;
 %                 see a graph with "high bias" -- slide 8 in ML-advice.pdf 
 %
 
-lambda = 0;
+lambda = 1;
 [error_train, error_val] = ...
     learningCurve([ones(m, 1) X], y, ...
                   [ones(size(Xval, 1), 1) Xval], yval, ...
@@ -166,7 +166,7 @@ pause;
 %  lambda to see how the fit and learning curve change.
 %
 
-lambda = 0;
+lambda = 1;
 [theta] = trainLinearReg(X_poly, y, lambda);
 
 % Plot training data and fit
@@ -176,11 +176,13 @@ plotFit(min(X), max(X), mu, sigma, theta, p);
 xlabel('Change in water level (x)');
 ylabel('Water flowing out of the dam (y)');
 title (sprintf('Polynomial Regression Fit (lambda = %f)', lambda));
+pause
 
 figure(2);
 [error_train, error_val] = ...
     learningCurve(X_poly, y, X_poly_val, yval, lambda);
 plot(1:m, error_train, 1:m, error_val);
+pause
 
 title(sprintf('Polynomial Regression Learning Curve (lambda = %f)', lambda));
 xlabel('Number of training examples')
